@@ -1,0 +1,26 @@
+*{
+  text-align: center;
+}
+#myDiagramDiv {
+    margin-top:200px;
+  background-color: white;
+  border: solid 1px black;
+  height: 500px;
+  width: 80%;
+  margin-left:auto;
+    margin-right:auto;
+}
+
+#mySavedModel {
+  text-align:left;
+  width: 40%;
+  margin-top:50px;
+  height: 500px;
+  height: 300px;
+}
+.butt{
+  margin-top:50px;
+}
+#hide{
+  background-color: red;
+}

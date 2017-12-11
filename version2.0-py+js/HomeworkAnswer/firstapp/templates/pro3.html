@@ -1,0 +1,94 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Org Chart Editor</title>
+<meta name="description" content="An organization chart editor -- edit details and change relationships." />
+<!-- Copyright 1998-2017 by Northwoods Software Corporation. -->
+<meta charset="UTF-8">
+<script src="{% static 'js/go.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/style.css' %}" >
+<script >
+// first set the value you will be using.
+var STATIC_URL = "{{STATIC_URL}}";
+// and anything else you need to set
+</script>
+ <style type="text/css">
+            body {
+                background-color:red;
+                background: url({% static 'images/super_blur_back2.jpg' %});
+                background-size: cover;
+            }
+ </style>
+<!--script type="text/javascript"  src="{{STATIC_URL}}/js/code.js" ></script -->
+
+<link rel="stylesheet" href="{% static 'css/semantic.css' %}" >
+    <script  src="{% static 'js/goSamples.js' %}"></script>
+    <script src="{% static 'js/dataInspector.js' %}"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"> </script>
+    <div class="ui inverted top fixed menu borderless red menu">
+            <div class="header item">
+                <div class="ui image">
+                    <img src="{% static 'images/tenlogo2.png' %}" alt="">
+                </div>
+            </div>
+
+            <div class="right menu">
+                {% if request.user.is_authenticated %}
+                    <div class="item">
+                        <h5 class="ui inverted header">
+                            <div class="ui mini circular image">
+                                <img src="{% static 'images/default.png' %}" alt="" />
+                            </div>
+                            <span>{{ request.user.username }}</span>
+                        </h5>
+                    </div>
+                    <div class="item">
+                        <a href="{% url 'logout' %}" class="ui inverted circular button">Logout</a>
+                    </div>
+
+                {% else %}
+
+                    <div class="item">
+                        <a href="{% url 'login' %}" class="ui inverted circular button">Signup/Login</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+</head>
+
+
+<body onload="init()" style= "background : url({% static 'images/super_blur_back2.jpg' %} ");>
+<div id="sample">
+
+  <div id="myDiagramDiv" style="background-color: whitesmoke; border: solid 1px black; height: 500px"></div>
+  <div>
+    <div id="myInspector">
+
+    </div>
+  </div>
+
+  <div>
+    <div class="butt">
+        <!--这是一段注释。注释不会在浏览器中显示。--><!--script id="code" src="{% static 'js/code.js' %}"></script-->
+        <button class="ui icon button">
+  <i class="cloud icon"></i>
+</button>
+      <button class="ui icon button" id="SaveButton" onclick="save()"> <i class="cloud icon"></i>Save</button>
+      <button class="ui basic button" onclick="load()"> <i class="icon user"></i>Load</button>
+      Diagram Model saved in JSON format:
+    </div>
+  <div>
+  请选择家谱:<input class="ui basic button" type="file" id="file" /><input type="button" class="ui basic button" value="加载" onclick="readAsText();"/>
+  <input type="button" class="ui basic button" value="保存" onclick="saveastext();"/>
+    <textarea hidden id="mySavedModel" >
+
+    </textarea>
+  </div>
+
+  </div>
+</div>
+</body>
+</html>
