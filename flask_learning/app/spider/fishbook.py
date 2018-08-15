@@ -11,11 +11,11 @@ class fishbook:
     isbn_url = 'http://t.yushu.im/v2/book/isbn/{}'
     keyword_url = 'http://t.yushu.im/v2/book/search?q={}&count={}&start={}'
     def __init__(self):
-        pass
+        self.total = 0
+        self.books = []
 
-    @classmethod
-    def searchbyisbn(cls, isbn):
-        url = cls.isbn_url.format(isbn)
+    def searchbyisbn(self, isbn):
+        url = self.isbn_url.format(isbn)
         reslut = HTTP.get(url)
         #以下是缓存的伪代码，减少访问api的频率次数
         # book = query_from_mysql(isbn)
@@ -23,16 +23,27 @@ class fishbook:
         #     return book
         # else:
         #     save(res)
-        return reslut
-    @classmethod
-    def searchbykeyword(cls, keyword, page=1):
-        url = cls.isbn_url.format(keyword,current_app.config['PRE_PAGE'],cls.calculate(page))
-        reslut = HTTP.get(url)
-        return reslut
+        self.__fill_single(reslut)
+        # return reslut
 
-    @classmethod
-    def calculate(cls, page):
+
+    def searchbykeyword(self, keyword, page=1):
+        url = self.isbn_url.format(keyword,current_app.config['PRE_PAGE'],self.calculate(page))
+        reslut = HTTP.get(url)
+        self.__fill_collection(reslut)
+        # return reslut
+
+    def calculate(self, page):
         return current_app.config['PRE_PAGE'] * (page - 1)
+
+    def __fill_single(self,data):
+        if data:
+            self.total = 1
+            self.books.append(data)
+    def __fill_collection(self,data):
+        self.books = data['books']
+        self.total = data['total']
+
 
 #先检查app_stack 当其为空时，推入app进app栈，当来请求时，推入request stack
 #请求结束时，两个栈元素都会被推出
