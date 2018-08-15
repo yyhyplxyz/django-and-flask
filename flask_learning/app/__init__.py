@@ -13,7 +13,10 @@ def create_app():
     app.config.from_object('app.setting')
     register_blueprint(app)
     db.init_app(app)
-    db.create_all()
+    #以下是两种方法，第三种方法是在初始化db时传入app
+    # with app.app_context():
+    #     db.create_all()
+    db.create_all(app = app)
     return app
 
 

@@ -1,5 +1,5 @@
 from flask import jsonify, request
-
+from app.viewmodels.book import Book_viewmodel
 from app.forms.book import searchform
 from app.web import web
 from app.spider.fishbook import fishbook
@@ -18,8 +18,10 @@ def search():
         isbn_or_key = is_isbn_or_key(q)
         if isbn_or_key == 'isbn':
             res = fishbook.searchbyisbn(q)
+            res = Book_viewmodel.package_single(res, q)
         else:
             res = fishbook.searchbykeyword(q,page)
+            res = Book_viewmodel.package_collection(res, q)
         return jsonify(res)
     else:
         return jsonify(form.errors)

@@ -17,6 +17,12 @@ class fishbook:
     def searchbyisbn(cls, isbn):
         url = cls.isbn_url.format(isbn)
         reslut = HTTP.get(url)
+        #以下是缓存的伪代码，减少访问api的频率次数
+        # book = query_from_mysql(isbn)
+        # if book:
+        #     return book
+        # else:
+        #     save(res)
         return reslut
     @classmethod
     def searchbykeyword(cls, keyword, page=1):
