@@ -59,3 +59,8 @@ class fishbook:
 # with app.app_context():
 #     a = current_app
 #     d = current_app.confif['DEBUG']
+
+#jiajia是一个模板语言，我们可以自己更改模板语言类型，对字典和对象的访问方式是一样的 if和for in要在百分号里，且必须类似latex闭合
+#竖线作为值的过滤
+# 根据end point反向寻找文件，保证了修改static文件夹位置时，不会改变过多代码
+# url_for('static', filename) redertemplate不是通过路由，不可以使用此方法

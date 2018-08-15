@@ -33,3 +33,6 @@ def search():
         # return jsonify(books)
     else:
         return jsonify(form.errors)
+
+    #单页面业务逻辑主要在前端完成
+    #多页面业务逻辑主要在服务器运算完成

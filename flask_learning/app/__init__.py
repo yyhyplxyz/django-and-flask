@@ -4,7 +4,7 @@ from app.models.book import db
 
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(__name__) #决定了根目录是app，而不是fisher，可以指定static_folder,static_url
 
     # 蓝图 blueprint来实现分文件功能 app->蓝图->视图函数 wen是一个蓝图
 
