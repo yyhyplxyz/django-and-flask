@@ -42,16 +42,3 @@ class fishbook:
 # with app.app_context():
 #     a = current_app
 #     d = current_app.confif['DEBUG']
-
-class Myresource:
-    def __enter__(self):
-        print("connect resource")
-        return self #返回上下文管理器
-    def __exit__(self, exc_type, exc_val, exc_tb): #要有四个参数
-        print("close resource")
-
-    def query(self):
-        print("query")
-
-with Myresource() as resource:
-    resource.query()
