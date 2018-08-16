@@ -2,13 +2,18 @@
 class Book_viewmodel:
     def __init__(self,book):
         self.title = book['title']
-        self.author = book['author']
+        self.author = book['author'][0]
         self.image = book['image']
         self.price = book['price']
         self.summary = book['summary']
         self.pages = book['pages']
         self.publisher = book['publisher']
+        self.isbn = book['isbn']
 
+    @property #以属性的方式访问函数
+    def intro(self):
+        intros = filter(lambda x : True if x else False, [self.author,self.publisher,self.price])
+        return ' / '.join(intros)
 
 class Book_collection:
     def __init__(self):

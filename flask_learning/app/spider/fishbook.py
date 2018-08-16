@@ -42,6 +42,9 @@ class fishbook:
     def __fill_collection(self,data):
         self.books = data['books']
         self.total = data['total']
+    @property
+    def first(self):
+        return self.books[0] if self.total >= 1 else None
 
 
 #先检查app_stack 当其为空时，推入app进app栈，当来请求时，推入request stack

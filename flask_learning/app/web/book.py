@@ -38,3 +38,9 @@ def search():
 
     #单页面业务逻辑主要在前端完成
     #多页面业务逻辑主要在服务器运算完成
+@web.route('/book/<isbn>/detail')
+def book_detail(isbn):
+    yushubook = fishbook()
+    yushubook.searchbyisbn(isbn)
+    book = Book_viewmodel(yushubook.first)
+    return render_template('book_detail.html',book=book,wishes=[],gifts=[])
