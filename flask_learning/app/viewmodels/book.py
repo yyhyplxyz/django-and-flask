@@ -18,7 +18,7 @@ class Book_collection:
 
     def fill(self, yushubook, keyword):
         self.total = yushubook.total
-        self.keyword = yushubook.keyword
+        self.keyword = keyword
         self.books = [Book_viewmodel(book) for book in yushubook.books]
 
 # class Book_viewmodel:

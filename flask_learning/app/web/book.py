@@ -1,4 +1,4 @@
-from flask import jsonify, request
+from flask import jsonify, request, flash, render_template
 from app.viewmodels.book import Book_viewmodel,Book_collection
 from app.forms.book import searchform
 from app.web import web
@@ -24,15 +24,17 @@ def search():
             # res = fishbook.searchbyisbn(q)
             # res = Book_viewmodel.package_single(res, q)
         else:
-            yushubook.searchbykeyword(q.page)
+            yushubook.searchbykeyword(q,page)
         #__dict__会返回变量的字典形式，能解决序列化问题
         books.fill(yushubook, q)
-        return json.dumps(books, default=lambda o: o.__dict__)
+        # return json.dumps(books, default=lambda o: o.__dict__)
             # res = fishbook.searchbykeyword(q,page)
             # res = Book_viewmodel.package_collection(res, q)
         # return jsonify(books)
     else:
-        return jsonify(form.errors)
+        flash('搜索的关键字不符合要求，请重新搜索')
+        # return jsonify(form.errors)
+    return render_template('search_result.html', books=books)
 
     #单页面业务逻辑主要在前端完成
     #多页面业务逻辑主要在服务器运算完成

@@ -7,7 +7,6 @@ from fisher import app
 class fishbook:
     # per_page = 15
     #模型层 MVC中的M层
-
     isbn_url = 'http://t.yushu.im/v2/book/isbn/{}'
     keyword_url = 'http://t.yushu.im/v2/book/search?q={}&count={}&start={}'
     def __init__(self):
@@ -28,7 +27,7 @@ class fishbook:
 
 
     def searchbykeyword(self, keyword, page=1):
-        url = self.isbn_url.format(keyword,current_app.config['PRE_PAGE'],self.calculate(page))
+        url = self.keyword_url.format(keyword,current_app.config['PRE_PAGE'],self.calculate(page))
         reslut = HTTP.get(url)
         self.__fill_collection(reslut)
         # return reslut
@@ -64,3 +63,7 @@ class fishbook:
 #竖线作为值的过滤
 # 根据end point反向寻找文件，保证了修改static文件夹位置时，不会改变过多代码
 # url_for('static', filename) redertemplate不是通过路由，不可以使用此方法
+
+
+#set_flash_messge 消息闪现,多个消息组成列表, 一个block里定义的消息 set  只在这个作用域内起作用 with和endwith可以进一步限制作用域
+# flash("hello, qiyue", category='errors')
