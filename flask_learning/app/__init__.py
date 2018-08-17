@@ -1,8 +1,9 @@
 from flask import Flask
 
-from app.models.book import db
+from app.models.base import db
+from flask_login import LoginManager
 
-
+loginmanager = LoginManager()
 def create_app():
     app = Flask(__name__) #决定了根目录是app，而不是fisher，可以指定static_folder,static_url
 
@@ -16,7 +17,9 @@ def create_app():
     #以下是两种方法，第三种方法是在初始化db时传入app
     # with app.app_context():
     #     db.create_all()
-    db.create_all(app = app)
+    loginmanager.init_app(app)
+    with app.app_context():
+        db.create_all(app = app)
     return app
 
 

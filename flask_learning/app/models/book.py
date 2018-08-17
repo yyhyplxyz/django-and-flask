@@ -1,11 +1,12 @@
 #sqlalchemy -> flask-sqlachemy 高度封装
 #wtforms ->flaskWtfroms
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Boolean, Float
+from app.models.base import Base
 from flask_sqlalchemy import SQLAlchemy
 
-db = SQLAlchemy()
 
-class book(db.Model):
+
+class book(Base):
     id = Column(Integer, primary_key = True, autoincrement = True)
     title = Column(String(50), nullable=False)
     author = Column(String(50), default='未名')
