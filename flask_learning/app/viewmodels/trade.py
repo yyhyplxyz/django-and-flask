@@ -15,3 +15,6 @@ class TradeInfo:
             time=single.create_datetime.strftime('%Y-%m-%d'),
             id=single.id
         )
+
+# class MY_TRADE:
+#gift和wish都可以抽象成这个viewmodel

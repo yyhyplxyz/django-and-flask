@@ -4,8 +4,6 @@ from app.models.base import *
 
 from sqlalchemy import *
 from sqlalchemy.orm import relationship
-
-from app.models.wish import Wish
 from app.spider.fishbook import fishbook
 from collections import namedtuple
 
@@ -55,3 +53,6 @@ class Gift(Base):
         #不应返回元组列表 而应返回字典
         count_list = [{'count':w[0], 'isbn':w[1]} for w in count_list]
         return count_list
+
+
+from app.models.wish import Wish

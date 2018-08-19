@@ -3,7 +3,7 @@ from flask import render_template, request,redirect, url_for, flash
 from app.forms.auth import RegisterForm, LoginForm
 from app.models.user import User
 from app.models.base import db
-from flask_login import login_user
+from flask_login import login_user, logout_user
 
 @web.route('/register', methods=['GET', 'POST']) #返回页面是get，用户提交是post
 def register():
@@ -52,4 +52,5 @@ def change_password():
 
 @web.route('/logout')
 def logout():
-    pass
+    logout_user() #清空浏览器cookie
+    return redirect(url_for('web.indx'))
