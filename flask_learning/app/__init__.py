@@ -2,8 +2,10 @@ from flask import Flask
 
 from app.models.base import db
 from flask_login import LoginManager
+from flask_mail import Mail
 
 loginmanager = LoginManager()
+mail = Mail()
 def create_app():
     app = Flask(__name__) #决定了根目录是app，而不是fisher，可以指定static_folder,static_url
 
@@ -20,6 +22,7 @@ def create_app():
     loginmanager.init_app(app)
     loginmanager.login_view = 'web.login' #致命登陆的视图函数，需要登陆时自动跳转
     loginmanager.login_message = '请先登录或注册'
+    mail.init_app(app)
     with app.app_context():
         db.create_all(app = app)
     return app

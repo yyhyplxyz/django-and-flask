@@ -1,6 +1,9 @@
+from flask import current_app
+
 from app.libs.helper import is_isbn_or_key
-from app.models.base import Base
+from app.models.base import Base, db
 from sqlalchemy import *
+from itsdangerous import JSONWebSignatureSerializer as Serializer
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app import  loginmanager
@@ -48,7 +51,27 @@ class User(Base, UserMixin):
             return True
         else:
             return False
-        
+
+    def generate_token(self, expiration=600):
+        s = Serializer(current_app.config['SECRET_KEY'], expiration)
+        temp = s.dumps({'id':self.id}).decode('utf-8')
+        return temp
+
+
+    @staticmethod
+    def reset_password(token, new_pass):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.load(token.encode('utf-8'))
+        except:
+            return false
+        uid = data.get('id')
+        with db.auto_commit():
+            user = User.query.get(uid) #针对主键而言
+            user.password = new_pass
+        return True
+
+
     def check_password(self, raw):
         check_password_hash(self._password, raw)
 
