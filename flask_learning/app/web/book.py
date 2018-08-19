@@ -1,4 +1,9 @@
 from flask import jsonify, request, flash, render_template
+from flask_login import current_user
+
+from app.models.gift import Gift
+from app.models.wish import Wish
+from app.templates.trade import Trade_info
 from app.viewmodels.book import Book_viewmodel,Book_collection
 from app.forms.book import searchform
 from app.web import web
@@ -40,7 +45,27 @@ def search():
     #多页面业务逻辑主要在服务器运算完成
 @web.route('/book/<isbn>/detail')
 def book_detail(isbn):
+    has_in_gift = False
+    has_in_wish = False
+
     yushubook = fishbook()
     yushubook.searchbyisbn(isbn)
     book = Book_viewmodel(yushubook.first)
-    return render_template('book_detail.html',book=book,wishes=[],gifts=[])
+    if current_user.is_authenticated:
+        if Gift.query.filter_by(uid = current_user.id, isbn=isbn, launched=False).first():
+            has_in_gift = True
+        if Wish.query.filter_by(isbn = isbn, launched=False).first():
+            has_in_wish = True
+
+
+    trade_gift = Gift.query.filter_by(isbn = isbn, launched=False).all()
+    trade_wish = Wish.query.filter_by(isbn=isbn,launched=False).all()
+    trade_wish_detail = Trade_info(trade_wish)
+    trade_gift_detail = Trade_info(trade_gift)
+
+
+    return render_template('book_detail.html',book=book,wishes=trade_wish_detail,gifts=trade_gift_detail,
+                           has_in_gift = has_in_gift,
+                            has_in_wish = has_in_wish)
+
+#MVC 业务逻辑是写在model层中的

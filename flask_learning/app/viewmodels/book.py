@@ -9,6 +9,8 @@ class Book_viewmodel:
         self.pages = book['pages']
         self.publisher = book['publisher']
         self.isbn = book['isbn']
+        self.pubdate = book['pubdate']
+        self.binding = book['binding']
 
     @property #以属性的方式访问函数
     def intro(self):

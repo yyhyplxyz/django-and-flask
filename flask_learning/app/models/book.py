@@ -18,5 +18,6 @@ class book(Base):
     pubdate = Column(String(20))
     summary = Column(String(1000))
     image = Column(String(50))
+
     def sample(self):
         pass
