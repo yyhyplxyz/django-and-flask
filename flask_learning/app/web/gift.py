@@ -1,15 +1,20 @@
-from flask import current_app, flash
+from flask import current_app, flash, render_template
 
 from app.models.base import db
 from app.models.gift import Gift
+from app.viewmodels.gift import Mygifts
 from . import web
 from flask_login import login_required, current_user
 
 @login_required #权限分级是通过改写loginrequired实现的
 @web.route('/my/gifts')
 def my_gifts():
-
-    pass
+    uid = current_user.id
+    gifts_of_mine = Gift.get_user_gifts(uid)
+    isbn_list = [gift.isbn for gift in gifts_of_mine]
+    wish_count_list = Gift.get_wish_counts(isbn_list)
+    view_model = Mygifts(gifts_of_mine, wish_count_list)
+    return render_template('my_gifts.html', gifts=view_model.gifts)
 
 @login_required
 @web.route('/gifts/book/<isbn>')
