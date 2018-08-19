@@ -46,6 +46,8 @@ def forget_password_request():
             from app.libs.email import send_email
             send_email(form.email.data, 'Reset Your password', 'email/reset.html',
                        user=user, token=user.generate_token())
+            flash('一封邮件已送达信箱' + account_email + '， 请及时查收')
+            # return redirect(url_for('web.login'))
     return render_template("auth/forget_password_request.html", form = form)
 
 
