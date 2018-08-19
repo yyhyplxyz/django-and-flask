@@ -18,6 +18,8 @@ def create_app():
     # with app.app_context():
     #     db.create_all()
     loginmanager.init_app(app)
+    loginmanager.login_view = 'web.login' #致命登陆的视图函数，需要登陆时自动跳转
+    loginmanager.login_message = '请先登录或注册'
     with app.app_context():
         db.create_all(app = app)
     return app

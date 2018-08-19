@@ -2,6 +2,7 @@ from app.models.base import Base
 from sqlalchemy import *
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from app import  loginmanager
 class User(Base, UserMixin):
     id = Column(Integer, primary_key=True)
     nickname = Column(String(24), nullable=False)
@@ -28,3 +29,7 @@ class User(Base, UserMixin):
         
     def check_password(self, raw):
         check_password_hash(self._password, raw)
+
+@loginmanager.user_loader #在app里导入了loginmanager
+def get_user(uid):
+    return User.query.get(int(uid))

@@ -13,7 +13,7 @@ def register():
         user.set_attrs(form.data)
         db.session.add(user)
         db.session.commit()
-        redirect(url_for('web.login'))
+        return redirect(url_for('web.login'))
     return render_template('auth/register.html', form=form)
 
 
@@ -24,7 +24,11 @@ def login():
     if request.method == 'POST' and form.validate():
         user = User.query.filter_by(email = form.email.data).first()
         if user and user.check_password(form.password.data):
-            login_user(user)
+            login_user(user, remember=True) #remembercookie duriation 默认设置是365天
+            next = request.args.get('next') #登陆后跳转回之前页面
+            if not  next or not next.startswith('/'): #防止非法next字符串 造成非法重定向
+                next = url_for('web.index')
+            return redirect(next)
         else:
             flash('账号不存在或密码错误')
 
