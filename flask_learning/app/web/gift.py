@@ -1,6 +1,8 @@
-from flask import current_app, flash, render_template
+from flask import current_app, flash, render_template, redirect, url_for
 
+from app.libs.enums import PendingStatus
 from app.models.base import db
+from app.models.drift import Drift
 from app.models.gift import Gift
 from app.viewmodels.gift import Mygifts
 from . import web
@@ -34,8 +36,19 @@ def save_to_gifts(isbn):
     return
 
 @web.route('/gifts/<gid>/redraw')
+@login_required
 def redraw_from_gifts(gid):
-    pass
+    gift = Gift.query.filter_by(id=gid, launched=False).first()
+    if not gift:
+        flash('该书籍不存在，或已经交易，删除失败')
+    drift = Drift.query.filter_by(gift_id=gid, pending=PendingStatus.waiting).first()
+    if drift:
+        flash('这个礼物正处于交易状态，请先前往鱼漂完成该交易')
+    else:
+        with db.auto_commit():
+            current_user.beans -= current_app.config['BEANS_UPLOAD_ONE_BOOK']
+            gift.delete()
+    return redirect(url_for('web.my_gifts'))
 
 
 

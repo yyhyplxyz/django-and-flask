@@ -1,5 +1,7 @@
 from flask import current_app
+from math import floor
 
+from app.libs.enums import PendingStatus
 from app.libs.helper import is_isbn_or_key
 from app.models.base import Base, db
 from sqlalchemy import *
@@ -7,9 +9,11 @@ from itsdangerous import JSONWebSignatureSerializer as Serializer
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app import  loginmanager
+from app.models.drift import Drift
 from app.models.gift import Gift
 from app.models.wish import Wish
 from app.spider.fishbook import fishbook
+
 
 
 class User(Base, UserMixin):
@@ -74,6 +78,26 @@ class User(Base, UserMixin):
 
     def check_password(self, raw):
         check_password_hash(self._password, raw)
+
+    def can_send_drift(self):
+        if self.beans < 1:
+            return False
+        success_gifts_count = Gift.query.filter_by(
+            uid = self.id, launched=True
+        ).count()
+        success_receive_count = Drift.query.filter_by(requester_id = self.id, pending = PendingStatus.success).count()
+        return True if \
+                floor(success_receive_count / 2) <= floor(success_gifts_count) \
+                else False
+
+    @property
+    def summary(self):
+        return dict(
+            nickname=self.nickname,
+            beans=self.beans,
+            email=self.email,
+            send_receive=str(self.send_counter) + '/' + str(self.receive_counter)
+        )
 
 @loginmanager.user_loader #在app里导入了loginmanager
 def get_user(uid):
